@@ -1,18 +1,31 @@
 <?php
 require 'vendor/autoload.php';
-
-require 'cliente.php';
-// require 'dao/ClienteDAO.php';
-// require 'dao/EstabelecimentoDAO.php';
-// require 'model/Cliente.php';
-// require 'model/Estabelecimento.php';
+require 'clienteDAO.php';
 
 $app = new \Slim\Slim();
+$app->response()->header('Content-Type', 'application/json;charset=utf-8');
 
 $app->get('/clientes/:cpf', function ($cpf) {
   //recupera o cliente
-  $cliente = Cliente::getClienteByCPF($cpf);
+  $cliente = ClienteDAO::getClienteByCPF($cpf);
   echo json_encode($cliente);
+});
+
+$app->get('/clientes', function() {
+  // recupera todos os clientes
+  $clientes = ClienteDAO::getAll();
+  echo json_encode($clientes);
+});
+
+$app->post('/clientes', function() {
+  // recupera o request
+  $request = \Slim\Slim::getInstance()->request();
+
+  // insere o cliente
+  $novoCliente = json_decode($request->getBody());
+  $novoCliente = ClienteDAO::addCliente($novoCliente);
+
+  echo json_encode($novoCliente);
 });
 
 $app->put('/clientes/:id', function ($id) {
@@ -21,26 +34,21 @@ $app->put('/clientes/:id', function ($id) {
 
   // atualiza o cliente
   $cliente = json_decode($request->getBody());
-  $cliente = Cliente::updateCliente($cliente, $id);
+  $cliente = ClienteDAO::updateCliente($cliente, $id);
 
    echo json_encode($cliente);
 });
 
+$app->delete('/clientes/:id', function($id) {
+  // exclui o cliente
+  $isDeleted = ClienteDAO::deleteCliente($id);
 
-
-$app->get('/estabelecimentos', function () {
-  $estabelecimentos = EstabelecimentoDAO::getAll();
-  echo json_decode($estabelecimentos);
-});
-
-$app->get('/estabelecimentos/:cnpj', function ($cnpj) {
-  $estabelecimento = EstabelecimentoDAO::getByCNPJ($cnpj);
-  echo json_decode($estabelecimento);
-});
-
-$app->put('/estabelecimentos/:id', function ($id) {
-  $estabelecimento = EstabelecimentoDAO::getById($id);
-  $estabelecimentoAtualizado = json_decode(CORPOOOOOOO);
+  // verifica se houve problema na exclusão
+  if ($isDeleted) {
+    echo "{'message':'Produto excluído'}";
+  } else {
+    echo "{'message':'Erro ao excluir produto'}";
+  }
 });
 
 $app->run();
