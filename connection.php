@@ -2,10 +2,10 @@
 
 class Connection
 {
-  public static $database = "serasa";
-  public static $address = "127.0.0.1";
-  public static $user = "root";
-  public static $password = "";
+  public static $database = "daw-aluno8";
+  public static $address = "alunos.coltec.ufmg.br";
+  public static $user = "daw-aluno8";
+  public static $password = "edmundo";
 
   public static function getConnection() {
     $connection = mysqli_connect(Connection::$address, Connection::$user, Connection::$password, Connection::$database);
