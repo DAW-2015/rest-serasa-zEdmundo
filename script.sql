@@ -81,10 +81,10 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `dividas` ;
 
 CREATE TABLE IF NOT EXISTS `dividas` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
   `clientes_id` INT NOT NULL,
   `estabelecimentos_id` INT NOT NULL,
   `valor` DECIMAL(10,2) NOT NULL,
-  PRIMARY KEY (`clientes_id`, `estabelecimentos_id`),
   INDEX `fk_clientes_has_estabelecimentos_estabelecimentos1_idx` (`estabelecimentos_id` ASC),
   INDEX `fk_clientes_has_estabelecimentos_clientes_idx` (`clientes_id` ASC),
   CONSTRAINT `fk_clientes_has_estabelecimentos_clientes`
